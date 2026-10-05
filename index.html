@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>My Tukda's Birthday ♡</title>
+<style>
+  *{box-sizing:border-box}
+  html,body{margin:0;min-height:100%;font-family:Georgia,"Times New Roman",serif}
+  body{
+    overflow:hidden;color:#fff;
+    background:
+      radial-gradient(circle at 50% 20%, rgba(255,154,198,.18), transparent 28%),
+      radial-gradient(circle at 20% 80%, rgba(174,129,255,.12), transparent 25%),
+      linear-gradient(145deg,#090611,#160d20 48%,#090611);
+  }
+  .stars,.hearts{position:fixed;inset:0;pointer-events:none;overflow:hidden}
+  .star{position:absolute;width:2px;height:2px;background:#fff;border-radius:50%;opacity:.6;animation:twinkle 2.8s infinite ease-in-out}
+  @keyframes twinkle{50%{opacity:.12;transform:scale(.5)}}
+  .heart{position:absolute;bottom:-30px;font-size:18px;opacity:0;animation:float 8s linear infinite}
+  @keyframes float{0%{transform:translateY(0) rotate(0);opacity:0}10%{opacity:.65}90%{opacity:.35}100%{transform:translateY(-110vh) rotate(25deg);opacity:0}}
+  main{min-height:100vh;display:grid;place-items:center;padding:24px;position:relative;z-index:2}
+  .card{
+    width:min(720px,94vw);padding:42px 28px 34px;text-align:center;
+    background:rgba(255,255,255,.055);border:1px solid rgba(255,255,255,.12);
+    border-radius:30px;box-shadow:0 25px 80px rgba(0,0,0,.45),inset 0 1px rgba(255,255,255,.08);
+    backdrop-filter:blur(15px);
+  }
+  .tiny{font-family:Arial,sans-serif;text-transform:uppercase;letter-spacing:4px;font-size:11px;opacity:.62}
+  h1{font-size:clamp(38px,8vw,70px);margin:14px 0 8px;line-height:1.02;font-weight:500}
+  .subtitle{font-size:18px;opacity:.76;margin:0 auto 32px;max-width:500px;line-height:1.6}
+  .countdown{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:20px auto 30px;max-width:600px}
+  .unit{padding:18px 8px;border-radius:18px;background:rgba(255,255,255,.065);border:1px solid rgba(255,255,255,.08)}
+  .num{display:block;font-family:Arial,sans-serif;font-size:clamp(30px,6vw,52px);font-weight:700}
+  .label{font-family:Arial,sans-serif;font-size:10px;letter-spacing:2px;text-transform:uppercase;opacity:.5}
+  #message{min-height:30px;font-style:italic;opacity:.78;transition:opacity .4s}
+  .lock{margin-top:25px;display:inline-flex;gap:9px;align-items:center;padding:11px 18px;border-radius:999px;background:rgba(255,255,255,.06);font-family:Arial,sans-serif;font-size:12px;letter-spacing:1px}
+  .hidden{display:none!important}
+  #unlocked{animation:appear 1.2s ease both}
+  @keyframes appear{from{opacity:0;transform:translateY(20px) scale(.97)}to{opacity:1;transform:none}}
+  .birthday{font-size:clamp(38px,8vw,68px);margin:5px 0 15px}
+  .wish{font-size:19px;line-height:1.7;opacity:.82;margin:0 auto 25px;max-width:570px}
+  .gift{
+    display:inline-block;text-decoration:none;color:#160d20;background:#fff;
+    padding:15px 28px;border-radius:999px;font-family:Arial,sans-serif;font-weight:700;
+    box-shadow:0 10px 35px rgba(255,255,255,.16);transition:.25s
+  }
+  .gift:hover{transform:translateY(-3px) scale(1.02);box-shadow:0 15px 45px rgba(255,255,255,.24)}
+  .note{margin-top:18px;font-family:Arial,sans-serif;font-size:10px;opacity:.35}
+  @media(max-width:500px){.countdown{gap:6px}.unit{padding:14px 4px}.card{padding:34px 17px}}
+</style>
+</head>
+<body>
+<div class="stars" id="stars"></div>
+<div class="hearts" id="hearts"></div>
+
+<main>
+  <section class="card" id="locked">
+    <div class="tiny">a little secret is waiting...</div>
+    <h1>My Tukda's<br>Birthday</h1>
+    <p class="subtitle">your surprise is safely locked away until the very beginning of your special day ♡</p>
+
+    <div class="countdown">
+      <div class="unit"><span class="num" id="days">00</span><span class="label">days</span></div>
+      <div class="unit"><span class="num" id="hours">00</span><span class="label">hours</span></div>
+      <div class="unit"><span class="num" id="minutes">00</span><span class="label">minutes</span></div>
+      <div class="unit"><span class="num" id="seconds">00</span><span class="label">seconds</span></div>
+    </div>
+
+    <div id="message">shhh... don't try to peek yet.</div>
+    <div class="lock">♡ &nbsp; GIFT LOCKED &nbsp; ♡</div>
+  </section>
+
+  <section class="card hidden" id="unlocked">
+    <div class="tiny">the wait is over...</div>
+    <div class="birthday">HAPPY BIRTHDAY,<br>MY TUKDA ♡</div>
+    <p class="wish">take a breath. smile now. today is all about you.<br>and yes... your little surprises are finally ready.</p>
+    <a class="gift" id="giftLink" href="#" target="_blank" rel="noopener">OPEN YOUR GIFTS ♡</a>
+    <div class="note">made with an unreasonable amount of love</div>
+  </section>
+</main>
+
+<script>
+  // ============================================================
+  // CHANGE THIS ONE LINE to your birthday-gift website URL.
+  // Example: const GIFT_URL = "https://yourusername.github.io/birthday-gift/";
+  // ============================================================
+  const GIFT_URL = "https://withyourcat.github.io/My-Tukda-Brithday/";
+
+  // October 12, 2026 at 12:00 AM IST = 2026-10-11T18:30:00Z
+  const TARGET = new Date("2026-10-11T18:30:00Z").getTime();
+
+  const messages = [
+    "shhh... don't try to peek yet.",
+    "your surprise is hiding very patiently...",
+    "tsk tsk, no peeking, tukda.",
+    "just a little longer...",
+    "someone very loved is about to have a birthday.",
+    "take a breath... it's almost time.",
+    "your birthday magic is getting closer ♡"
+  ];
+  let lastMessage = -1;
+
+  function pad(n){ return String(Math.max(0,n)).padStart(2,"0"); }
+
+  function unlock(){
+    document.getElementById("locked").classList.add("hidden");
+    document.getElementById("unlocked").classList.remove("hidden");
+    document.getElementById("giftLink").href =
+      (GIFT_URL.startsWith("http://") || GIFT_URL.startsWith("https://"))
+      ? GIFT_URL : "#";
+    burst();
+  }
+
+  function tick(){
+    const diff = TARGET - Date.now();
+    if(diff <= 0){ unlock(); return; }
+
+    const days = Math.floor(diff / 86400000);
+    const hours = Math.floor((diff % 86400000) / 3600000);
+    const mins = Math.floor((diff % 3600000) / 60000);
+    const secs = Math.floor((diff % 60000) / 1000);
+
+    document.getElementById("days").textContent = pad(days);
+    document.getElementById("hours").textContent = pad(hours);
+    document.getElementById("minutes").textContent = pad(mins);
+    document.getElementById("seconds").textContent = pad(secs);
+
+    const index = Math.floor((diff / 1000 / 12)) % messages.length;
+    if(index !== lastMessage){
+      lastMessage = index;
+      const el = document.getElementById("message");
+      el.style.opacity = 0;
+      setTimeout(()=>{el.textContent = messages[index]; el.style.opacity = .78},220);
+    }
+  }
+
+  function burst(){
+    for(let i=0;i<70;i++){
+      const h=document.createElement("div");
+      h.textContent=["♡","♥","✦","✧"][Math.floor(Math.random()*4)];
+      h.style.position="fixed";
+      h.style.left=(50+Math.random()*30-15)+"vw";
+      h.style.top=(50+Math.random()*20-10)+"vh";
+      h.style.fontSize=(12+Math.random()*25)+"px";
+      h.style.zIndex=10;
+      h.style.pointerEvents="none";
+      h.style.transition="transform 1.8s ease-out, opacity 1.8s ease-out";
+      document.body.appendChild(h);
+      requestAnimationFrame(()=>{h.style.transform=`translate(${(Math.random()-.5)*600}px,${(Math.random()-.5)*600}px) rotate(${Math.random()*180}deg)`;h.style.opacity=0});
+      setTimeout(()=>h.remove(),1900);
+    }
+  }
+
+  for(let i=0;i<90;i++){
+    const s=document.createElement("div"); s.className="star";
+    s.style.left=Math.random()*100+"%"; s.style.top=Math.random()*100+"%";
+    s.style.animationDelay=Math.random()*3+"s"; s.style.opacity=.15+Math.random()*.65;
+    document.getElementById("stars").appendChild(s);
+  }
+
+  for(let i=0;i<18;i++){
+    const h=document.createElement("div"); h.className="heart";
+    h.textContent=["♡","♥","✦"][Math.floor(Math.random()*3)];
+    h.style.left=Math.random()*100+"%";
+    h.style.animationDelay=(-Math.random()*8)+"s";
+    h.style.animationDuration=(7+Math.random()*7)+"s";
+    document.getElementById("hearts").appendChild(h);
+  }
+
+  tick();
+  setInterval(tick,1000);
+</script>
+</body>
+</html>
